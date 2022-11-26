@@ -29,10 +29,18 @@ def Week_Number(date):
 
 def Selected_data(date):
     '''
-    Функция возвращает кортеж из 2 значений:
-    дата и ее четность (числитель или знаменатель)
+    Функция возвращает кортеж из 3 значений:
+    дата, день недели, четность недели (числитель или знаменатель)
     '''
-    print(QDate.currentDate(),Is_Week_Even_Or_Odd(date))
+    days_of_week={1:'Monday',
+                  2:'Tuesday',
+                  3:'Wednesday',
+                  4:'Thursday',
+                  5:'Friday',
+                  6:'Saturday',
+                  7:'Sunday'}
+
+    print(f'{QDate.day(date)}.{QDate.month(date)}.{QDate.year(date)}',days_of_week[QDate.dayOfWeek(date)],Is_Week_Even_Or_Odd(date))
 
 
 class CalendarWindow(QCalendarWidget):
