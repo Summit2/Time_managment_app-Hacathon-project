@@ -1,8 +1,4 @@
-import sys
-
-from PySide6.QtCore import *
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
+from PySide6.QtWidgets import QWidget, QTextEdit, QLabel, QVBoxLayout, QHBoxLayout
 
 
 DARK_GREEN = '#61892F'

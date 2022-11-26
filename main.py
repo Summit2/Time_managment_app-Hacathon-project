@@ -1,12 +1,10 @@
 import sys
 import json
-import time
 
-from PySide6.QtCore import *
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
+from PySide6.QtCore import QSize
+from PySide6.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QWidget, QApplication
 
-from manager import Lesson, Manager
+from manager import Manager
 from Calendar import CalendarWindow
 
 
@@ -22,6 +20,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setMinimumSize(QSize(480, 320))
         self.setBaseSize(QSize(960, 640))
+        self.setWindowTitle('Заметки')
 
         with open('data.json', encoding="UTF-8") as f:
             self.data = json.load(f)
