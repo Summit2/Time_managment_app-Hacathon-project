@@ -19,13 +19,14 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setMinimumSize(QSize(480, 320))
-        self.setBaseSize(QSize(960, 640))
+        self.resize(QSize(960, 640))
         self.setWindowTitle('Заметки')
 
         with open('data.json', encoding="UTF-8") as f:
             self.data = json.load(f)
 
         self.calendar = CalendarWindow()
+        self.calendar.date_selected.connect(self.changeDay)
 
         self.c_button = QPushButton('Календарь')
         self.c_button.setStyleSheet(
@@ -45,17 +46,13 @@ class MainWindow(QMainWindow):
         self.layout.addWidget(self.manager)
         self.setStyleSheet(f'MainWindow {{background-color: {BLACK};}}')
 
-        self.changeDay('22.11.2022', 'Odd')
-
     def closeEvent(self, event):
         """Сохранение данных при закрытии"""
         with open('data.json', 'w', encoding='UTF-8') as f:
             json.dump(self.data, f)
 
-    def changeDay(self, date, even):
+    def changeDay(self, date, day_of_the_week, even):
         """Обновить данные для указанного дня"""
-        day_of_the_week = "Tuesday"
-
         schedule = self.data['Schedule'][day_of_the_week][even]
         if self.data['Notes'].get(date) is None:
             self.data['Notes'][date] = dict()
