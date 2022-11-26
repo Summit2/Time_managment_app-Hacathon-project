@@ -23,13 +23,22 @@ class MainWindow(QMainWindow):
         self.setBaseSize(QSize(960, 640))
 
         with open('data.json', encoding="UTF-8") as f:
-            schedule = json.load(f)
-        schedule = schedule['Schedule']['Tuesday']['Odd']
+            self.data = json.load(f)
+        schedule = self.data['Schedule']['Tuesday']['Odd']
+        date = "15.11.2022"
+
+        if self.data['Notes'].get(date) is None:
+            self.data['Notes'][date] = dict()
+        print(self.data['Notes'][date])
 
         self.setCentralWidget(QWidget())
         self.layout = QVBoxLayout(self.centralWidget())
-        self.layout.addWidget(Manager(schedule))
+        self.layout.addWidget(Manager(schedule, self.data['Notes'][date]))
         self.setStyleSheet(f'MainWindow {{background-color: {BLACK};}}')
+
+    def closeEvent(self, event):
+        with open('data.json', 'w', encoding='UTF-8') as f:
+            json.dump(self.data, f)
 
 
 if __name__ == "__main__":
