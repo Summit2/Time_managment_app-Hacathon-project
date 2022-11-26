@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QWidget, QA
 
 from manager import Manager
 from Calendar import CalendarWindow
+from auth import AuthWindow
 
 
 DARK_GREEN = '#61892F'
@@ -21,9 +22,11 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(QSize(480, 320))
         self.resize(QSize(960, 640))
         self.setWindowTitle('Заметки')
+        self.data = {}
 
-        with open('data.json', encoding="UTF-8") as f:
-            self.data = json.load(f)
+        self.auth = AuthWindow()
+        self.auth.passed.connect(self.start)
+        self.auth.show()
 
         self.calendar = CalendarWindow()
         self.calendar.date_selected.connect(self.changeDay)
@@ -31,11 +34,11 @@ class MainWindow(QMainWindow):
         self.c_button = QPushButton('Календарь')
         self.c_button.setStyleSheet(
             f'''QPushButton {{
-                background-color: {DARK_GREY}; 
-                color: white; 
-                border-radius: 10px;
-                padding: 5px;
-            }}''')
+                    background-color: {DARK_GREY}; 
+                    color: white; 
+                    border-radius: 10px;
+                    padding: 5px;
+                }}''')
         self.c_button.clicked.connect(self.calendar.show)
 
         self.manager = Manager()
@@ -59,9 +62,12 @@ class MainWindow(QMainWindow):
         notes = self.data['Notes'][date]
         self.manager.chageRecords(schedule, notes)
 
+    def start(self, data):
+        self.data = data
+        self.show()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
-    window.show()
     sys.exit(app.exec())
