@@ -30,8 +30,8 @@ class MainWindow(QMainWindow):
 
         self.calendar = CalendarWindow()
 
-        self.c_button = QPushButton()
-        self.c_button.setStyleSheet(f'{{background-color: {DARK_GREY}, color: white;}}')
+        self.c_button = QPushButton('Календарь')
+        self.c_button.setStyleSheet(f'QPushButton {{background-color: {DARK_GREY}; color: white; border-radius: 10px;}}')
         self.c_button.clicked.connect(self.calendar.show)
         self.layout.addWidget(self.c_button)
 

@@ -63,8 +63,6 @@ class Manager(QWidget):
             }}''')
 
     def chageDay(self, schedule, notes):
-        print(schedule, notes)
-
         for i in reversed(range(self.lessons.count())):
             self.lessons.itemAt(i).widget().deleteLater()
 
