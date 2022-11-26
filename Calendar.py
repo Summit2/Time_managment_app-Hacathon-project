@@ -19,14 +19,12 @@ def Week_Number(date):
     Функция выдает номер недели, к которой относится date
     \ndate должна быть типа QCalendarWidget
     '''
-
-
     return (datetime.date( QDate.year(date), QDate.month(date),QDate.day(date)).isocalendar()[1])
 
 
 
 class CalendarWindow(QCalendarWidget):
-
+    date_selected = Signal(str, str)
 
     def __init__(self):
         super().__init__()
@@ -35,11 +33,6 @@ class CalendarWindow(QCalendarWidget):
         self.setGeometry(640, 480, 480, 480)
 
         self.activated.connect(Is_Week_Even_Or_Odd)
-
-
-
-
-
 
 
     def keyPressEvent(self, e):

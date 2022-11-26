@@ -13,7 +13,7 @@ LIGHT_GREY = '#6B6E70'
 
 
 class Lesson(QWidget):
-    noteChanged = Signal(str, str)
+    # noteChanged = Signal(str, str)
 
     def __init__(self, index, name, time, notes):
         super().__init__()
@@ -35,28 +35,19 @@ class Lesson(QWidget):
 
         self.text = QTextEdit(notes.get(index, ''))
         self.text.textChanged.connect(self.Changed)
-        # self.text.setWordWrap(True)
         self.h_layout = QHBoxLayout(self)
         self.h_layout.addLayout(self.v_layout, 1)
         self.h_layout.addWidget(self.text, 3)
-
-        # self.setAutoFillBackground(True)
-        # palette = self.palette()
-        # palette.setColor(QPalette.ColorRole.Window, DARK_GREY)
-        # self.setPalette(palette)
 
     def Changed(self):
         self.notes[self.index] = self.text.toPlainText()
 
 
 class Manager(QWidget):
-    def __init__(self, schedule, notes):
+    def __init__(self):
         super().__init__()
 
         self.lessons = QVBoxLayout(self)
-        for rec in schedule:
-            self.lessons.addWidget(Lesson(str(rec['index']), rec['name'], rec['time'], notes))
-
         self.setStyleSheet(
             f'''QLabel {{
             background-color: {DARK_GREY}; 
@@ -70,3 +61,12 @@ class Manager(QWidget):
             padding: 6px;
             border-radius: 10px;
             }}''')
+
+    def chageDay(self, schedule, notes):
+        print(schedule, notes)
+
+        for i in reversed(range(self.lessons.count())):
+            self.lessons.itemAt(i).widget().deleteLater()
+
+        for rec in schedule:
+            self.lessons.addWidget(Lesson(str(rec['index']), rec['name'], rec['time'], notes))
