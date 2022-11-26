@@ -25,8 +25,6 @@ def Week_Number(date):
     Функция возвращает номер недели, к которой относится date
     \ndate должна быть типа QCalendarWidget
     '''
-
-
     return (datetime.date( QDate.year(date), QDate.month(date),QDate.day(date)).isocalendar()[1])
 
 def Selected_data(date):
@@ -38,7 +36,7 @@ def Selected_data(date):
 
 
 class CalendarWindow(QCalendarWidget):
-
+    date_selected = Signal(str, str)
 
     def __init__(self):
         super().__init__()
@@ -47,11 +45,6 @@ class CalendarWindow(QCalendarWidget):
         self.setGeometry(640, 480, 480, 480)
 
         self.activated.connect(Selected_data)
-
-
-
-
-
 
 
     def keyPressEvent(self, e):
