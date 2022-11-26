@@ -27,16 +27,9 @@ def Week_Number(date):
     '''
     return (datetime.date( QDate.year(date), QDate.month(date),QDate.day(date)).isocalendar()[1])
 
-def Selected_data(date):
-    '''
-    Функция возвращает кортеж из 2 значений:
-    дата и ее четность (числитель или знаменатель)
-    '''
-    print(QDate.currentDate(),Is_Week_Even_Or_Odd(date))
-
 
 class CalendarWindow(QCalendarWidget):
-    date_selected = Signal(str, str)
+    date_selected = Signal(str, str, str)
 
     def __init__(self):
         super().__init__()
@@ -44,8 +37,24 @@ class CalendarWindow(QCalendarWidget):
         self.setWindowTitle("Календарь. Для создания заметок нажмите на соответствующую дату")
         self.setGeometry(640, 480, 480, 480)
 
-        self.activated.connect(Selected_data)
+        self.activated.connect(self.Selected_data)
 
+    def Selected_data(self, date):
+        '''
+        Функция возвращает кортеж из 3 значений:
+        дата, день недели, четность недели (числитель или знаменатель)
+        '''
+        days_of_week = {1: 'Monday',
+                        2: 'Tuesday',
+                        3: 'Wednesday',
+                        4: 'Thursday',
+                        5: 'Friday',
+                        6: 'Saturday',
+                        7: 'Sunday'}
+        self.hide()
+
+        self.date_selected.emit(f'{QDate.day(date)}.{QDate.month(date)}.{QDate.year(date)}',
+                                days_of_week[QDate.dayOfWeek(date)], Is_Week_Even_Or_Odd(date))
 
     def keyPressEvent(self, e):
         # when escape key is pressed
@@ -54,9 +63,6 @@ class CalendarWindow(QCalendarWidget):
             # show the present date
             #self.showToday()
             print("Нажат esc")
-
-
-
 
 
 if __name__ == "__main__":
