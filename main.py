@@ -5,7 +5,7 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
 
-from schedule import Lesson, Schedule
+from manager import Lesson, Manager
 
 
 DARK_GREEN = '#61892F'
@@ -21,10 +21,14 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setMinimumSize(QSize(480, 320))
         self.setBaseSize(QSize(960, 640))
-        with open('schedule.json') as f:
+
+        with open('data.json', encoding="UTF-8") as f:
             schedule = json.load(f)
-        schedule = schedule['Monday']
-        self.setCentralWidget(Schedule(schedule))
+        schedule = schedule['Schedule']['Tuesday']['Odd']
+
+        self.setCentralWidget(QWidget())
+        self.layout = QVBoxLayout(self.centralWidget())
+        self.layout.addWidget(Manager(schedule))
         self.setStyleSheet(f'MainWindow {{background-color: {BLACK};}}')
 
 
