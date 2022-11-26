@@ -1,5 +1,6 @@
 import sys
 import json
+import time
 
 from PySide6.QtCore import *
 from PySide6.QtGui import *
@@ -25,30 +26,34 @@ class MainWindow(QMainWindow):
         with open('data.json', encoding="UTF-8") as f:
             self.data = json.load(f)
 
-        self.setCentralWidget(QWidget())
-        self.layout = QVBoxLayout(self.centralWidget())
-
         self.calendar = CalendarWindow()
 
         self.c_button = QPushButton('Календарь')
-        self.c_button.setStyleSheet(f'QPushButton {{background-color: {DARK_GREY}; color: white; border-radius: 10px;}}')
+        self.c_button.setStyleSheet(
+            f'''QPushButton {{
+            background-color: {DARK_GREY}; 
+            color: white; 
+            border-radius: 10px;
+            padding: 5px;
+            }}''')
         self.c_button.clicked.connect(self.calendar.show)
-        self.layout.addWidget(self.c_button)
 
         self.manager = Manager()
+
+        self.setCentralWidget(QWidget())
+        self.layout = QVBoxLayout(self.centralWidget())
+        self.layout.addWidget(self.c_button)
         self.layout.addWidget(self.manager)
         self.setStyleSheet(f'MainWindow {{background-color: {BLACK};}}')
 
-        self.changeDay('', '')
+        self.changeDay('22.11.2022', 'Odd')
 
     def closeEvent(self, event):
         with open('data.json', 'w', encoding='UTF-8') as f:
             json.dump(self.data, f)
 
     def changeDay(self, date, even):
-        date = "22.11.2022"
         day_of_the_week = "Tuesday"
-        even = 'Odd'
 
         schedule = self.data['Schedule'][day_of_the_week][even]
         if self.data['Notes'].get(date) is None:

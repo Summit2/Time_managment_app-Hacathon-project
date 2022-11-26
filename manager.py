@@ -13,19 +13,19 @@ LIGHT_GREY = '#6B6E70'
 
 
 class Lesson(QWidget):
-    # noteChanged = Signal(str, str)
-
     def __init__(self, index, name, time, notes):
         super().__init__()
         self.index = index
         self.notes = notes
 
+        # Добавление надписи с названием предмета
         self.time = QLabel(time)
         self.time.setWordWrap(True)
         self.time_layout = QHBoxLayout()
         self.time_layout.addWidget(self.time)
         self.time_layout.addStretch(0)
 
+        # Добавление надписи с временем занятия
         self.v_layout = QVBoxLayout()
         self.name = QLabel(name)
         self.name.setWordWrap(True)
@@ -33,6 +33,7 @@ class Lesson(QWidget):
         self.v_layout.addLayout(self.time_layout)
         self.v_layout.addStretch(0)
 
+        # Добавление Поля под заметки
         self.text = QTextEdit(notes.get(index, ''))
         self.text.textChanged.connect(self.Changed)
         self.h_layout = QHBoxLayout(self)
@@ -63,8 +64,13 @@ class Manager(QWidget):
             }}''')
 
     def chageDay(self, schedule, notes):
-        for i in reversed(range(self.lessons.count())):
+        """
+        Обновляет рассписание и заметки
+        """
+        # Удаление старых записей
+        for i in range(self.lessons.count() - 1, -1, -1):
             self.lessons.itemAt(i).widget().deleteLater()
 
+        # Добавление новый записей
         for rec in schedule:
             self.lessons.addWidget(Lesson(str(rec['index']), rec['name'], rec['time'], notes))
