@@ -12,7 +12,13 @@ def Is_Week_Even_Or_Odd(date):
     (числитель (Odd) или знаменатель (Even))
     :return:
     '''
-    print( ("Even", "Odd")[Week_Number(date) % 2])
+    september=datetime.date(QDate.year(date),9,1).isocalendar()[1]
+    even_or_odd=september%2 #если september четная, то 0, иначе 1
+    result = abs(september-Week_Number(date))%2  # 0 если недели совпадают по четности, иначе 1
+    if result==1:
+        return ('Odd','Even')[even_or_odd]
+    else:
+        return ('Even','Odd')[even_or_odd]
 
 def Week_Number(date):
     '''
@@ -28,7 +34,7 @@ def Selected_data(date):
     Функция возвращает кортеж из 2 значений:
     дата и ее четность (числитель или знаменатель)
     '''
-    return (QDate.currentDate(),Week_Number(date))
+    print(QDate.currentDate(),Is_Week_Even_Or_Odd(date))
 
 
 class CalendarWindow(QCalendarWidget):
@@ -40,7 +46,7 @@ class CalendarWindow(QCalendarWidget):
         self.setWindowTitle("Календарь. Для создания заметок нажмите на соответствующую дату")
         self.setGeometry(640, 480, 480, 480)
 
-        self.activated.connect()
+        self.activated.connect(Selected_data)
 
 
 
@@ -61,7 +67,6 @@ class CalendarWindow(QCalendarWidget):
 
 
 if __name__ == "__main__":
-
 
     calendar = QApplication(sys.argv)
     main_window = CalendarWindow()
