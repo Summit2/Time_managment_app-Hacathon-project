@@ -16,13 +16,19 @@ def Is_Week_Even_Or_Odd(date):
 
 def Week_Number(date):
     '''
-    Функция выдает номер недели, к которой относится date
+    Функция возвращает номер недели, к которой относится date
     \ndate должна быть типа QCalendarWidget
     '''
 
 
     return (datetime.date( QDate.year(date), QDate.month(date),QDate.day(date)).isocalendar()[1])
 
+def Selected_data(date):
+    '''
+    Функция возвращает кортеж из 2 значений:
+    дата и ее четность (числитель или знаменатель)
+    '''
+    return (QDate.currentDate(),Week_Number(date))
 
 
 class CalendarWindow(QCalendarWidget):
@@ -34,7 +40,7 @@ class CalendarWindow(QCalendarWidget):
         self.setWindowTitle("Календарь. Для создания заметок нажмите на соответствующую дату")
         self.setGeometry(640, 480, 480, 480)
 
-        self.activated.connect(Is_Week_Even_Or_Odd)
+        self.activated.connect()
 
 
 
