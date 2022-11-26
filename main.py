@@ -30,10 +30,10 @@ class MainWindow(QMainWindow):
         self.c_button = QPushButton('Календарь')
         self.c_button.setStyleSheet(
             f'''QPushButton {{
-            background-color: {DARK_GREY}; 
-            color: white; 
-            border-radius: 10px;
-            padding: 5px;
+                background-color: {DARK_GREY}; 
+                color: white; 
+                border-radius: 10px;
+                padding: 5px;
             }}''')
         self.c_button.clicked.connect(self.calendar.show)
 
@@ -48,17 +48,19 @@ class MainWindow(QMainWindow):
         self.changeDay('22.11.2022', 'Odd')
 
     def closeEvent(self, event):
+        """Сохранение данных при закрытии"""
         with open('data.json', 'w', encoding='UTF-8') as f:
             json.dump(self.data, f)
 
     def changeDay(self, date, even):
+        """Обновить данные для указанного дня"""
         day_of_the_week = "Tuesday"
 
         schedule = self.data['Schedule'][day_of_the_week][even]
         if self.data['Notes'].get(date) is None:
             self.data['Notes'][date] = dict()
         notes = self.data['Notes'][date]
-        self.manager.chageDay(schedule, notes)
+        self.manager.chageRecords(schedule, notes)
 
 
 if __name__ == "__main__":

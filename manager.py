@@ -45,24 +45,22 @@ class Manager(QWidget):
         super().__init__()
 
         self.lessons = QVBoxLayout(self)
-        self.setStyleSheet(
-            f'''QLabel {{
-            background-color: {DARK_GREY}; 
-            color: white;
-            padding: 6px;
-            border-radius: 10px;
-            }}
-            QTextEdit {{
-            background-color: {DARK_GREY}; 
-            color: white;
-            padding: 6px;
-            border-radius: 10px;
-            }}''')
 
-    def chageDay(self, schedule, notes):
-        """
-        Обновляет рассписание и заметки
-        """
+        style = f'''
+                background-color: {DARK_GREY}; 
+                color: white;
+                padding: 6px;
+                border-radius: 10px;
+            '''
+        self.setStyleSheet(
+            f'''Manager {{
+                padding: 0px;
+            }}
+            QLabel {{{style}}}
+            QTextEdit {{{style}}}''')
+
+    def chageRecords(self, schedule, notes):
+        """Обновляет рассписание и заметки"""
         # Удаление старых записей
         for i in range(self.lessons.count() - 1, -1, -1):
             self.lessons.itemAt(i).widget().deleteLater()
