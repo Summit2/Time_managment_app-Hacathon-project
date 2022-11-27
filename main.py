@@ -22,6 +22,7 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(QSize(480, 320))
         self.resize(QSize(960, 640))
         self.setWindowTitle('Заметки')
+        self.file_name = 'data.json'
         self.data = {}
 
         self.auth = AuthWindow()
@@ -51,7 +52,7 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         """Сохранение данных при закрытии"""
-        with open('data.json', 'w', encoding='UTF-8') as f:
+        with open(self.file_name, 'w', encoding='UTF-8') as f:
             json.dump(self.data, f)
 
     def changeDay(self, date, day_of_the_week, even):
@@ -62,7 +63,8 @@ class MainWindow(QMainWindow):
         notes = self.data['Notes'][date]
         self.manager.chageRecords(schedule, notes)
 
-    def start(self, data):
+    def start(self, file_name, data):
+        self.file_name = file_name
         self.data = data
         self.show()
 
