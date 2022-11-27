@@ -36,9 +36,11 @@ class CalendarWindow(QCalendarWidget):
 
         self.setWindowTitle("Календарь. Для создания заметок нажмите на соответствующую дату")
         self.setGeometry(640, 480, 480, 480)
+        self.setStyleSheet(" background-color: #474b4f")
 
         self.activated.connect(self.Selected_data)
 
+        #self.setStyleSheet("QLineEdit { background-color: yellow }")
     def Selected_data(self, date):
         '''
         Функция возвращает кортеж из 3 значений:
@@ -64,6 +66,13 @@ class CalendarWindow(QCalendarWidget):
             #self.showToday()
             print("Нажат esc")
 
+
+    def paintCell(self, painter, rect, date):
+        QtWidgets.QCalendarWidget.paintCell(self, painter, rect, date)
+        if date == date.currentDate():
+            painter.setBrush(QtGui.QColor(0, 50, 2000, 50))
+            painter.setPen(QtGui.QColor(0, 0, 0, 0))
+            painter.drawRect(rect)
 
 if __name__ == "__main__":
 
