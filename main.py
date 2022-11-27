@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QWidget, QA
 
 from manager import Manager
 from Calendar import CalendarWindow
+from auth import AuthWindow
 
 
 DARK_GREEN = '#61892F'
@@ -21,9 +22,12 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(QSize(480, 320))
         self.resize(QSize(960, 640))
         self.setWindowTitle('Заметки')
+        self.file_name = 'data.json'
+        self.data = {}
 
-        with open('data.json', encoding="UTF-8") as f:
-            self.data = json.load(f)
+        self.auth = AuthWindow()
+        self.auth.passed.connect(self.start)
+        self.auth.show()
 
         self.calendar = CalendarWindow()
         self.calendar.date_selected.connect(self.changeDay)
@@ -31,11 +35,11 @@ class MainWindow(QMainWindow):
         self.c_button = QPushButton('Календарь')
         self.c_button.setStyleSheet(
             f'''QPushButton {{
-                background-color: {DARK_GREY}; 
-                color: white; 
-                border-radius: 10px;
-                padding: 5px;
-            }}''')
+                    background-color: {DARK_GREY}; 
+                    color: white; 
+                    border-radius: 10px;
+                    padding: 5px;
+                }}''')
         self.c_button.clicked.connect(self.calendar.show)
 
         self.manager = Manager()
@@ -48,7 +52,7 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         """Сохранение данных при закрытии"""
-        with open('data.json', 'w', encoding='UTF-8') as f:
+        with open(self.file_name, 'w', encoding='UTF-8') as f:
             json.dump(self.data, f)
 
     def changeDay(self, date, day_of_the_week, even):
@@ -59,9 +63,13 @@ class MainWindow(QMainWindow):
         notes = self.data['Notes'][date]
         self.manager.chageRecords(schedule, notes)
 
+    def start(self, file_name, data):
+        self.file_name = file_name
+        self.data = data
+        self.show()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
-    window.show()
     sys.exit(app.exec())
