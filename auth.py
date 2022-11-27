@@ -19,19 +19,23 @@ class AuthWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        # Параметры окна
         self.setMinimumSize(QSize(480, 320))
         self.setWindowTitle('Авторизация')
 
+        # Добавление надписи
         self.title = QLabel('Введите имя пользователя')
         self.title.setAlignment(Qt.AlignCenter)
+        # Добавление поля для ввода пароля
         self.login = QLineEdit()
         self.login.editingFinished.connect(self.check)
+        # Добавление кнопки создания нового пользователя
         self.add_button = QPushButton('Добавить нового пользователя')
         self.add_button.clicked.connect(self.creteData)
         self.add_button.hide()
-        self.login.textChanged.connect(self.add_button.hide())
         self.login.textChanged.connect(self.hide_button)
 
+        # Расположение всех элементов вертикально
         self.setCentralWidget(QWidget())
         self.layout = QVBoxLayout()
         self.layout.addStretch(1)
@@ -40,11 +44,13 @@ class AuthWindow(QMainWindow):
         self.layout.addWidget(self.add_button)
         self.layout.addStretch(1)
 
+        # Добавление отступов побокам
         self.centering = QHBoxLayout(self.centralWidget())
         self.centering.addStretch(1)
         self.centering.addLayout(self.layout, 2)
         self.centering.addStretch(1)
 
+        # Применение стилей
         self.setStyleSheet(
             f'''AuthWindow {{
                 background-color: {BLACK}; 
@@ -70,6 +76,11 @@ class AuthWindow(QMainWindow):
             }}''')
 
     def check(self):
+        """
+        Проверка существования пользователя.\n
+        Если пользователь существует откроется его записи.\n
+        Если пользователя нет, то появится кнопка добавления пользователя.
+        """
         try:
             file_name = "data/"+self.login.text()+".json"
             f = open(file_name)
@@ -80,6 +91,7 @@ class AuthWindow(QMainWindow):
             self.add_button.show()
 
     def creteData(self):
+        """Добавление нового пользователя"""
         data = dict()
         data['Notes'] = dict()
         data['Schedule'] = {day: {'Odd': [], 'Even': []} for day in WEEKDAYS}
@@ -88,4 +100,5 @@ class AuthWindow(QMainWindow):
         self.hide()
 
     def hide_button(self, *args):
+        """Скрытие кнопки добавления пользователя при продолжении ввода логина"""
         self.add_button.hide()
